@@ -1,10 +1,26 @@
-*Bankers and Empire* Text Analysis
-================
+---
+title: "*Bankers and Empire* Text Analysis"
+output: github_document
+---
 
-Loading and Cleaning
---------------------
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(tidytext)
+library(stringr)
+library(here)
+library(wordcloud)
+library(koRpus)
+library(koRpus.lang.en)
+set.seed(60615)
+```
 
-``` r
+## Loading and Cleaning
+
+```{r load-text, echo=TRUE}
 #load the book from text file
 book_text = here("bankers_and_empire.txt") %>% 
   read_file() %>%
@@ -30,34 +46,28 @@ for (line_index in 1:length(book_text[[1]])) {
 }
 ```
 
-Wordcloud
----------
-
-``` r
+## Wordcloud
+```{r wordcloud, message=FALSE, warning=FALSE}
 book_text %>%
   anti_join(stop_words) %>%
   count(word) %>%
   with(wordcloud(word, n, max.words = 150, colors = brewer.pal(8, "Set2")))
 ```
 
-![](README_files/figure-markdown_github/wordcloud-1.png)
+## Prevalence of Architecture
 
-Prevalence of Architecture
---------------------------
-
-Flesch-Kincaid Grade Level
---------------------------
-
-``` r
+## Flesch-Kincaid Grade Level
+```{r flesch-kincaid}
 #flesch.kincaid(here("bankers_and_empire.txt"), force.lang = "en")
 ```
 
-N-Gram
-------
+## N-Gram
 
-Sentiment Analysis
-------------------
+## Sentiment Analysis
 
 ### In General
 
+
 ### Across the Book
+
+
