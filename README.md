@@ -92,20 +92,19 @@ model to pick out different topics.
 
 ## Flesch-Kincaid Grade Level
 
-The Flesch-Kincaid grade level is determined by the function ![0.39
-(\\frac{\\text{total words}}{\\text{total sentences}}) + 11.8
-(\\frac{\\text{total syllables}}{\\text{total words}})
-- 15.59](https://latex.codecogs.com/png.latex?0.39%20%28%5Cfrac%7B%5Ctext%7Btotal%20words%7D%7D%7B%5Ctext%7Btotal%20sentences%7D%7D%29%20%2B%2011.8%20%28%5Cfrac%7B%5Ctext%7Btotal%20syllables%7D%7D%7B%5Ctext%7Btotal%20words%7D%7D%29%20-%2015.59
-"0.39 (\\frac{\\text{total words}}{\\text{total sentences}}) + 11.8 (\\frac{\\text{total syllables}}{\\text{total words}}) - 15.59")
+The Flesch-Kincaid grade level is determined by the function
+![Flesch-Kincaid grade level
+formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/bd4916e193d2f96fa3b74ee258aaa6fe242e110e)
 
 ``` r
 n_words = length(book_words[[1]])
 n_sent = length(book_sentences[[1]])
-n_syll = sapply(book_words$word, function(x) english_syllable_count(x)) %>% sum()
+#warning: this will take a surprisingly long amount of time, even parallelized
+n_syll = parSapply(cl, book_words$word, english_syllable_count) %>% sum()
 f_k_score = 0.39 * (n_words / n_sent) + 11.8 * (n_syll / n_words) - 15.59
 ```
 
-*Bankers and Empire* has a Flesch-Kincaid score of a 14<sup>th</sup>
+*Bankers and Empire* has a Flesch-Kincaid score of a 17<sup>th</sup>
 grade reading level.
 
 ## N-Gram

@@ -1,8 +1,6 @@
 ---
 title: "*Bankers and Empire* Text Analysis"
-output:
-  github_document:
-    pandoc_args: --webtex
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -25,6 +23,20 @@ source("http://lingtools.uoregon.edu/scripts/english_syllable_counter-102.R")
 set.seed(60615)
 windows.options(antialias = "cleartype")
 options(device = Cairo::CairoWin)
+
+#setup workers for parallelization
+setup_cl = function(seed = round(Sys.time())) {
+  require(parallel)
+  if (exists("cl")) {
+    print("Stopping existing cluster")
+    try(parallel::stopCluster(cl))
+  }
+  assign("cl", parallel::makeCluster(parallel::detectCores() - 1, outfile = "out.txt"), envir = globalenv())
+  RNGkind("L'Ecuyer-CMRG")
+  print(paste("Using", as.numeric(seed), "as parallel RNG seed"))
+  clusterSetRNGStream(cl, seed)
+}
+setup_cl(60615)
 ```
 
 ## Loading and Cleaning
@@ -109,11 +121,12 @@ There doesn't seem to be enough heterogenity in the text for an LDA model to pic
 
 ## Flesch-Kincaid Grade Level
 
-The Flesch-Kincaid grade level is determined by the function $0.39 (\frac{\text{total words}}{\text{total sentences}}) + 11.8 (\frac{\text{total syllables}}{\text{total words}}) - 15.59$
+The Flesch-Kincaid grade level is determined by the function ![Flesch-Kincaid grade level formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/bd4916e193d2f96fa3b74ee258aaa6fe242e110e)
 ```{r flesch-kincaid, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
 n_words = length(book_words[[1]])
 n_sent = length(book_sentences[[1]])
-n_syll = sapply(book_words$word, function(x) english_syllable_count(x)) %>% sum()
+#warning: this will take a surprisingly long amount of time, even parallelized
+n_syll = parSapply(cl, book_words$word, english_syllable_count) %>% sum()
 f_k_score = 0.39 * (n_words / n_sent) + 11.8 * (n_syll / n_words) - 15.59
 ```
 *Bankers and Empire* has a Flesch-Kincaid score of a `r round(f_k_score, digits = 0)`^th^ grade reading level.

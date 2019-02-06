@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 bankers_and_empire.txt
+out.txt
+*_cache/
