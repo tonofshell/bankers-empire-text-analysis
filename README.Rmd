@@ -121,7 +121,7 @@ There doesn't seem to be enough heterogenity in the text for an LDA model to pic
 
 ## Flesch-Kincaid Grade Level
 
-The Flesch-Kincaid grade level is determined by the function ![Flesch-Kincaid grade level formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/bd4916e193d2f96fa3b74ee258aaa6fe242e110e)
+The Flesch-Kincaid grade level is determined by the function ![Flesch-Kincaid grade level formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/8e68f5fc959d052d1123b85758065afecc4150c3)
 ```{r flesch-kincaid, echo=TRUE, message=FALSE, warning=FALSE, cache=TRUE}
 n_words = length(book_words[[1]])
 n_sent = length(book_sentences[[1]])

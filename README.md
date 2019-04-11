@@ -94,7 +94,7 @@ model to pick out different topics.
 
 The Flesch-Kincaid grade level is determined by the function
 ![Flesch-Kincaid grade level
-formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/bd4916e193d2f96fa3b74ee258aaa6fe242e110e)
+formula](https://wikimedia.org/api/rest_v1/media/math/render/svg/8e68f5fc959d052d1123b85758065afecc4150c3)
 
 ``` r
 n_words = length(book_words[[1]])
